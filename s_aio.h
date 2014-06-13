@@ -24,6 +24,8 @@ struct AIO_ATTR
     char* sendBuffer;
     int sendSize;
     int sendResult;
+    
+    int hasCache;
 };
 
 int AIO_ReadSocket(struct AIO_ATTR *ptr);

@@ -113,6 +113,7 @@ int main(int argc, char** argv)
                 aio_attr.recvBuffer = clientBuffer->recvBuffer;
                 aio_attr.recvBufferSize = READER_BUFFER_SIZE;
                 aio_attr.sendBuffer = clientBuffer->sendBuffer;
+                aio_attr.hasCache = FALSE;
 
                 //异步IO读取
                 AIO_ReadSocket(&aio_attr);

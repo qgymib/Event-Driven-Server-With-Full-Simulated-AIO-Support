@@ -119,7 +119,7 @@ void handleClient(struct AIO_ATTR* ptr)
         break;
 
     case EV_SEARCH:
-        actionForSearch(ptr);
+        actionForSearch(&aptr);
         break;
 
     case EV_FIX:
@@ -147,8 +147,6 @@ void handleClient(struct AIO_ATTR* ptr)
     default:
         break;
     }
-
-    //    modfd(epollfd, ((struct AIO_ATTR*) ptr)->fd, EPOLLOUT);
 }
 
 int packageMessage(struct AIO_ATTR* attr, int bsize, int type, const char* message)
@@ -177,12 +175,12 @@ int packageMessage(struct AIO_ATTR* attr, int bsize, int type, const char* messa
 
     //发送缓冲区需要预留两个字节：\0和\n
     int message_size = send_message.length();
+    cout << "Packaged Size:" << message_size << endl;
 
     if (message_size <= bsize)
     {
         //指定发送数据大小
         attr->clientBuffer->send_size = message_size;
-        cout << "Packaged Size:" << message_size << endl;
         //将字符串拷贝到发送缓冲区
         strncpy(attr->clientBuffer->sendBuffer, send_message.data(), send_message.length() + 1);
 
@@ -237,7 +235,7 @@ static void actionForLogin(struct ActionPtr* ptr)
         stringstream ss;
         (row != NULL) ? (ss << ERROR_PASSWD_INVALID) : (ss << ERROR_USERNAME_INVALID);
         result = ss.str();
-        
+
         mysql_free_result(sql_result);
     }
 
@@ -250,7 +248,7 @@ static void actionForLogin(struct ActionPtr* ptr)
 static void actionForSignup(struct ActionPtr* ptr)
 {
     string result;
-    
+
     string *message = ptr->message;
     vector<string> strVec;
     split(strVec, *message, is_any_of("_"));
@@ -271,25 +269,26 @@ static void actionForSignup(struct ActionPtr* ptr)
             .append("(`id` ,`username` ,`passwd` ,`permission`) ")
             .append("VALUES (NULL , '").append(username).append("', '")
             .append(passwd_md5).append("', '").append("0');");
-    
+
     mysql_query(&sql_connection, sql_vaild_username.data());
     MYSQL_RES *sql_result = mysql_store_result(&sql_connection);
     MYSQL_ROW row = mysql_fetch_row(sql_result);
     mysql_free_result(sql_result);
     stringstream ss;
-    
-    if(row != NULL)
-    {   //用户名已存在
+
+    if (row != NULL)
+    { //用户名已存在
         ss << ERROR_USERNAME_TOKEN;
     }
     else
-    {   //用户名可用
+    { //用户名可用
         mysql_query(&sql_connection, sql_insert_account.data());
         ss << USER_PERMISSION_NORMAL;
+        mysql_free_result(sql_result);
     }
-    
+
     result = ss.str();
-    
+
     packageMessage(ptr->aio_attr, WRITER_BUFFER_SIZE, EV_SIGNUP, result.data());
 
     ptr->aio_attr->callback = callback_writeSocket;
@@ -298,5 +297,38 @@ static void actionForSignup(struct ActionPtr* ptr)
 
 static void actionForSearch(struct ActionPtr* ptr)
 {
-    
+    string version;
+    string value;
+
+    string *message = ptr->message;
+    vector<string> strVec;
+    split(strVec, *message, is_any_of("_"));
+    vector<string>::iterator it = strVec.begin();
+
+    string location_key = *it;
+
+    string sql_search;
+    sql_search.append("SELECT version, value FROM `location` WHERE location_key = '")
+            .append(location_key).append("'");
+
+    mysql_query(&sql_connection, sql_search.data());
+    MYSQL_RES *sql_result = mysql_store_result(&sql_connection);
+    MYSQL_ROW row = mysql_fetch_row(sql_result);
+    mysql_free_result(sql_result);
+
+    if (row != NULL)
+    {//信息存在
+        version = row[0];
+        value = row[1];
+        packageMessage(ptr->aio_attr, WRITER_BUFFER_SIZE, EV_SEARCH_VALUE, value.data());
+    }
+    else
+    {//信息不存在
+        version = "-1";
+        value = "";
+        packageMessage(ptr->aio_attr, WRITER_BUFFER_SIZE, EV_SEARCH_VERSION, version.data());
+    }
+
+    ptr->aio_attr->callback = callback_writeSocket;
+    AIO_WriteSocket(ptr->aio_attr);
 }
