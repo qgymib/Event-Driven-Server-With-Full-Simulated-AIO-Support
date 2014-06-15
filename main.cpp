@@ -124,8 +124,6 @@ int main(int argc, char** argv)
     return (EXIT_SUCCESS);
 }
 
-
-
 void signal_termal(int signo)
 {
     if (signo == 2)

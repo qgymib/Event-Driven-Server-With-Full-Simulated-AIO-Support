@@ -12,7 +12,13 @@
 
 extern MYSQL sql_connection;
 
+/**
+ * 初始化数据库连接
+ */
 void initDatabaseConnection();
+/**
+ * 关闭数据库连接
+ */
 void closeDatabaseConnection();
 
 #endif	/* DATABASE_H */

@@ -7,10 +7,29 @@
 
 #ifndef TCP_H
 #define	TCP_H
-
+/**
+ * socket包裹函数
+ * @param family
+ * @param type
+ * @param protocol
+ * @return 
+ */
 int Socket(int family, int type, int protocol);
+/**
+ * bind包裹函数
+ * @param socket
+ * @param address
+ * @param address_len
+ * @return 
+ */
 int Bind(int socket, const struct sockaddr *address,
          socklen_t address_len);
+/**
+ * listen包裹函数
+ * @param socket
+ * @param backlog
+ * @return 
+ */
 int Listen(int socket, int backlog);
 /**
  * 为文件描述符添加事件

@@ -8,11 +8,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/s_aio.cpp</file>
+            <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/clientbuffer.h</file>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/define.h</file>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/s_aio.h</file>
-            <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/tcp.cpp</file>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/handler.h</file>
+            <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/tcp.cpp</file>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/handler.cpp</file>
+            <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/clientbuffer.cpp</file>
             <file>file:/home/qgymib/workspace/NetBeansProjects/Event-Driven%20Server%20With%20Full%20Simulated-AIO%20Support/main.cpp</file>
         </group>
     </open-files>
